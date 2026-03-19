@@ -65,12 +65,12 @@ const toggleScript = `(() => {
       href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <script is:inline>{themeScript}</script>
+    <script is:inline set:html={themeScript}></script>
   </head>
   <body>
     <div class="page-shell">
       <slot />
     </div>
-    <script is:inline>{toggleScript}</script>
+    <script is:inline set:html={toggleScript}></script>
   </body>
 </html>
