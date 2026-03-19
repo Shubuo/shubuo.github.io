@@ -1,0 +1,159 @@
+---
+const { content, locale } = Astro.props;
+
+const sections = content.sections.filter(
+  (section) => section.enabled !== false && section.items && section.items.length > 0
+);
+
+const showDownloads =
+  content.downloads?.enabled !== false &&
+  content.downloads?.items &&
+  content.downloads.items.length > 0;
+
+const navItems = [
+  { id: "overview", label: content.nav.overview },
+  { id: "highlights", label: content.nav.highlights },
+  ...sections.map((section) => ({ id: section.id, label: section.title })),
+  { id: "contact", label: content.nav.contact }
+];
+
+const langToggle = locale === "en" ? { label: "TR", href: "/tr/" } : { label: "EN", href: "/" };
+---
+<header class="topbar">
+  <div class="brand">BY</div>
+  <nav class="topnav">
+    {navItems.map((item) => (
+      <a href={`#${item.id}`} class="topnav-link">{item.label}</a>
+    ))}
+  </nav>
+  <div class="top-actions">
+    <a class="lang-link" href={langToggle.href}>{langToggle.label}</a>
+    <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false">
+      <span>Dark</span>
+    </button>
+  </div>
+</header>
+
+<main>
+  <section id="overview" class="hero">
+    <div class="hero-card">
+      <div class="avatar" aria-hidden="true">
+        <span>{content.hero.initials}</span>
+      </div>
+      <div class="hero-text">
+        <p class="hero-eyebrow">{content.hero.role}</p>
+        <h1>{content.hero.name}</h1>
+        <p class="hero-tagline">{content.hero.tagline}</p>
+        <p class="hero-summary">{content.hero.summary}</p>
+        <p class="hero-location">{content.hero.location}</p>
+        <div class="hero-cta">
+          <a class="btn primary" href={content.cta.emailUrl}>{content.cta.emailLabel}</a>
+          <a class="btn ghost" href={content.cta.calendlyUrl} target="_blank" rel="noreferrer">
+            {content.cta.calendlyLabel}
+          </a>
+        </div>
+        <div class="social-row">
+          {content.social.map((link) => (
+            <a href={link.url} class="social-link" target="_blank" rel="noreferrer">
+              {link.label}
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+    <div class="hero-side">
+      <div class="focus-card">
+        <h2>{content.highlights.title}</h2>
+        <p>{content.highlights.lead}</p>
+        <ul>
+          {content.hero.focus.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      </div>
+      {showDownloads && (
+        <div class="downloads-card">
+          <h3>{content.downloads.title}</h3>
+          <div class="downloads-grid">
+            {content.downloads.items.map((item) => (
+              item.url && !item.disabled ? (
+                <a class="download-link" href={item.url}>
+                  <span>{item.title}</span>
+                  {item.note && <small>{item.note}</small>}
+                </a>
+              ) : (
+                <div class="download-link disabled" aria-disabled="true">
+                  <span>{item.title}</span>
+                  {item.note && <small>{item.note}</small>}
+                </div>
+              )
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <section id="highlights" class="section">
+    <div class="section-head">
+      <h2>{content.highlights.title}</h2>
+      <p>{content.highlights.lead}</p>
+    </div>
+    <div class="card-grid">
+      {content.highlights.items.map((item, index) => (
+        <article class="card" style={`animation-delay: ${index * 80}ms`}>
+          <h3>{item.title}</h3>
+          <p>{item.description}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  {sections.map((section) => (
+    <section id={section.id} class="section">
+      <div class="section-head">
+        <h2>{section.title}</h2>
+        {section.lead && <p>{section.lead}</p>}
+      </div>
+      <div class="card-grid">
+        {section.items.map((item, index) => (
+          <article class="card" style={`animation-delay: ${index * 80}ms`}>
+            <div class="card-meta">
+              <div>
+                {item.url ? (
+                  <a class="card-title" href={item.url} target="_blank" rel="noreferrer">
+                    {item.title}
+                  </a>
+                ) : (
+                  <span class="card-title">{item.title}</span>
+                )}
+                {item.meta && <span class="card-sub">{item.meta}</span>}
+              </div>
+              {item.badge && <span class="badge">{item.badge}</span>}
+            </div>
+            {item.description && <p>{item.description}</p>}
+          </article>
+        ))}
+      </div>
+    </section>
+  ))}
+
+  <section id="contact" class="section contact">
+    <div class="contact-card">
+      <div>
+        <h2>{content.nav.contact}</h2>
+        <p>{content.footer.note}</p>
+      </div>
+      <div class="hero-cta">
+        <a class="btn primary" href={content.cta.emailUrl}>{content.cta.emailLabel}</a>
+        <a class="btn ghost" href={content.cta.calendlyUrl} target="_blank" rel="noreferrer">
+          {content.cta.calendlyLabel}
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <p>{content.footer.copyright}</p>
+</footer>

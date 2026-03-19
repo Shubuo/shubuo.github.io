@@ -1,0 +1,65 @@
+---
+import "../styles/global.css";
+
+const { title, description, lang = "en" } = Astro.props;
+const isEn = lang === "en";
+const altHref = isEn ? "/tr/" : "/";
+const altLang = isEn ? "tr" : "en";
+const themeScript = `(() => {
+  const storageKey = "theme";
+  const root = document.documentElement;
+  const getPreferred = () =>
+    window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  const setTheme = (theme) => {
+    root.dataset.theme = theme;
+    localStorage.setItem(storageKey, theme);
+    root.style.colorScheme = theme;
+  };
+  const stored = localStorage.getItem(storageKey);
+  setTheme(stored || getPreferred());
+
+  window.__toggleTheme = () => {
+    const current = root.dataset.theme || getPreferred();
+    setTheme(current === "dark" ? "light" : "dark");
+  };
+})();`;
+const toggleScript = `(() => {
+  const button = document.querySelector("[data-theme-toggle]");
+  if (!button) return;
+  const updateLabel = () => {
+    const theme = document.documentElement.dataset.theme || "light";
+    button.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
+    button.querySelector("span").textContent = theme === "dark" ? "Light" : "Dark";
+  };
+  updateLabel();
+  button.addEventListener("click", () => {
+    if (window.__toggleTheme) window.__toggleTheme();
+    updateLabel();
+  });
+})();`;
+---
+<!DOCTYPE html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="alternate" href={altHref} hreflang={altLang} />
+    <link rel="alternate" href={isEn ? "/" : "/tr/"} hreflang={lang} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <script is:inline>{themeScript}</script>
+  </head>
+  <body>
+    <div class="page-shell">
+      <slot />
+    </div>
+    <script is:inline>{toggleScript}</script>
+  </body>
+</html>
