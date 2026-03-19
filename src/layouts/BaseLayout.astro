@@ -39,8 +39,9 @@ const toggleScript = `(() => {
     const theme = document.documentElement.dataset.theme || "light";
     button.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
     button.dataset.theme = theme;
-    button.querySelector("span").textContent =
-      theme === "dark" ? "Light mode" : "Dark mode";
+    const label = theme === "dark" ? "Switch to light mode" : "Switch to dark mode";
+    button.setAttribute("aria-label", label);
+    button.setAttribute("title", label);
   };
   updateLabel();
   button.addEventListener("click", () => {
