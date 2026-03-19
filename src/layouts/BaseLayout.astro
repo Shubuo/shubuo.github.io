@@ -12,16 +12,25 @@ const themeScript = `(() => {
     window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
   const setTheme = (theme) => {
     root.dataset.theme = theme;
+    if (document.body) {
+      document.body.dataset.theme = theme;
+    }
     localStorage.setItem(storageKey, theme);
     root.style.colorScheme = theme;
   };
   const stored = localStorage.getItem(storageKey);
   setTheme(stored || getPreferred());
 
+  window.__setTheme = setTheme;
   window.__toggleTheme = () => {
     const current = root.dataset.theme || getPreferred();
     setTheme(current === "dark" ? "light" : "dark");
   };
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const theme = root.dataset.theme || getPreferred();
+    setTheme(theme);
+  });
 })();`;
 const toggleScript = `(() => {
   const button = document.querySelector("[data-theme-toggle]");
@@ -29,7 +38,9 @@ const toggleScript = `(() => {
   const updateLabel = () => {
     const theme = document.documentElement.dataset.theme || "light";
     button.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
-    button.querySelector("span").textContent = theme === "dark" ? "Light" : "Dark";
+    button.dataset.theme = theme;
+    button.querySelector("span").textContent =
+      theme === "dark" ? "Light mode" : "Dark mode";
   };
   updateLabel();
   button.addEventListener("click", () => {
@@ -51,7 +62,7 @@ const toggleScript = `(() => {
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <script is:inline>{themeScript}</script>

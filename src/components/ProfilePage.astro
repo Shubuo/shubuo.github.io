@@ -20,7 +20,7 @@ const navItems = [
 const langToggle = locale === "en" ? { label: "TR", href: "/tr/" } : { label: "EN", href: "/" };
 ---
 <header class="topbar">
-  <div class="brand">BY</div>
+  <div class="brand">{content.hero.initials}</div>
   <nav class="topnav">
     {navItems.map((item) => (
       <a href={`#${item.id}`} class="topnav-link">{item.label}</a>
