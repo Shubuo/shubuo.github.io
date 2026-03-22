@@ -1,159 +1,135 @@
 ---
 const { content, locale } = Astro.props;
 
-const sections = content.sections.filter(
-  (section) => section.enabled !== false && section.items && section.items.length > 0
-);
-
-const showDownloads =
-  content.downloads?.enabled !== false &&
-  content.downloads?.items &&
-  content.downloads.items.length > 0;
-
-const navItems = [
-  { id: "overview", label: content.nav.overview },
-  { id: "highlights", label: content.nav.highlights },
-  ...sections.map((section) => ({ id: section.id, label: section.title })),
-  { id: "contact", label: content.nav.contact }
-];
-
 const langToggle = locale === "en" ? { label: "TR", href: "/tr/" } : { label: "EN", href: "/" };
+const visibleDownloads = content.downloads.items.filter((item) => item.url);
+const categories = [...new Set(content.home.posts.map((post) => post.category))];
 ---
-<header class="topbar">
-  <div class="brand">BY</div>
-  <nav class="topnav">
-    {navItems.map((item) => (
-      <a href={`#${item.id}`} class="topnav-link">{item.label}</a>
-    ))}
-  </nav>
-  <div class="top-actions">
-    <a class="lang-link" href={langToggle.href}>{langToggle.label}</a>
-    <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false">
-      <span>Dark</span>
-    </button>
-  </div>
-</header>
-
-<main>
-  <section id="overview" class="hero">
-    <div class="hero-card">
-      <div class="avatar" aria-hidden="true">
-        <span>{content.hero.initials}</span>
+<div class="site-frame">
+  <aside class="profile-rail">
+    <div class="profile-card">
+      <div class="profile-image-wrap">
+        <img src={content.profile.imageUrl} alt={content.profile.imageAlt} class="profile-image" />
       </div>
-      <div class="hero-text">
-        <p class="hero-eyebrow">{content.hero.role}</p>
-        <h1>{content.hero.name}</h1>
-        <p class="hero-tagline">{content.hero.tagline}</p>
-        <p class="hero-summary">{content.hero.summary}</p>
-        <p class="hero-location">{content.hero.location}</p>
-        <div class="hero-cta">
-          <a class="btn primary" href={content.cta.emailUrl}>{content.cta.emailLabel}</a>
-          <a class="btn ghost" href={content.cta.calendlyUrl} target="_blank" rel="noreferrer">
-            {content.cta.calendlyLabel}
-          </a>
-        </div>
-        <div class="social-row">
+      <div class="profile-body">
+        <p class="profile-role">{content.profile.role}</p>
+        <h1>{content.profile.name}</h1>
+        <p class="profile-tagline">{content.profile.tagline}</p>
+        <p class="profile-summary">{content.profile.summary}</p>
+        <p class="profile-location">{content.profile.location}</p>
+
+        <div class="profile-socials" aria-label="Social links">
           {content.social.map((link) => (
-            <a href={link.url} class="social-link" target="_blank" rel="noreferrer">
-              {link.label}
-            </a>
+            <a href={link.url} target="_blank" rel="noreferrer">{link.label}</a>
           ))}
+        </div>
+
+        <div class="profile-actions">
+          <a class="main-btn" href={content.cta.emailUrl}>{content.cta.emailLabel}</a>
         </div>
       </div>
     </div>
-    <div class="hero-side">
-      <div class="focus-card">
-        <h2>{content.highlights.title}</h2>
-        <p>{content.highlights.lead}</p>
-        <ul>
-          {content.hero.focus.map((item) => (
-            <li>{item}</li>
-          ))}
-        </ul>
+  </aside>
+
+  <div class="content-shell">
+    <header class="masthead">
+      <nav class="main-nav" aria-label="Primary navigation">
+        <a class="nav-link active" href="#home">{content.nav.home}</a>
+        <span class="nav-link disabled" aria-disabled="true">{content.nav.cv}<small>{content.nav.soon}</small></span>
+        <span class="nav-link disabled" aria-disabled="true">{content.nav.blog}<small>{content.nav.soon}</small></span>
+      </nav>
+      <div class="header-tools">
+        <a class="lang-link" href={langToggle.href}>{langToggle.label}</a>
+        <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false">
+          <span class="sr-only">Toggle theme</span>
+          <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="4.25" stroke="currentColor" stroke-width="1.5" fill="none"></circle>
+            <path d="M12 2.75v2.5M12 18.75v2.5M4.75 12h-2.5M21.75 12h-2.5M5.93 5.93 4.16 4.16M19.84 19.84l-1.77-1.77M18.07 5.93l1.77-1.77M4.16 19.84l1.77-1.77" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+          </svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M20 14.5A7.5 7.5 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linejoin="round"></path>
+          </svg>
+        </button>
       </div>
-      {showDownloads && (
-        <div class="downloads-card">
-          <h3>{content.downloads.title}</h3>
-          <div class="downloads-grid">
-            {content.downloads.items.map((item) => (
-              item.url && !item.disabled ? (
-                <a class="download-link" href={item.url}>
+    </header>
+
+    <div class="content-grid">
+      <main id="home" class="main-column">
+        <section class="intro-card">
+          <p class="section-kicker">{content.nav.home}</p>
+          <h2>{content.home.introTitle}</h2>
+          <p>{content.home.introBody}</p>
+        </section>
+
+        <section class="posts-section">
+          <div class="section-heading">
+            <h3>{content.home.sectionTitle}</h3>
+          </div>
+          <div class="post-list">
+            {content.home.posts.map((post) => (
+              <article class="post-card">
+                <div class="post-meta">{post.category}</div>
+                <h4>{post.title}</h4>
+                <p>{post.excerpt}</p>
+                <span class="post-link">{post.ctaLabel}</span>
+              </article>
+            ))}
+          </div>
+        </section>
+      </main>
+
+      <aside class="sidebar-column">
+        <section class="widget-card">
+          <h3>{content.focus.title}</h3>
+          <ul class="widget-list focus-list">
+            {content.focus.items.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        </section>
+
+        <section class="widget-card">
+          <h3>{content.sidebar.recentTitle}</h3>
+          <ul class="widget-list link-list">
+            {content.home.posts.map((post) => (
+              <li><span>{post.title}</span></li>
+            ))}
+          </ul>
+        </section>
+
+        <section class="widget-card">
+          <h3>{content.sidebar.categoriesTitle}</h3>
+          <ul class="widget-list category-list">
+            {categories.map((category) => (
+              <li>{category}</li>
+            ))}
+          </ul>
+        </section>
+
+        <section class="widget-card note-card">
+          <h3>{content.sidebar.noteTitle}</h3>
+          <p>{content.sidebar.noteBody}</p>
+        </section>
+
+        {visibleDownloads.length > 0 && (
+          <section class="widget-card">
+            <h3>{content.downloads.title}</h3>
+            <div class="quick-links">
+              {visibleDownloads.map((item) => (
+                <a href={item.url} class="quick-link" target={item.url.startsWith("http") ? "_blank" : undefined} rel={item.url.startsWith("http") ? "noreferrer" : undefined}>
                   <span>{item.title}</span>
                   {item.note && <small>{item.note}</small>}
                 </a>
-              ) : (
-                <div class="download-link disabled" aria-disabled="true">
-                  <span>{item.title}</span>
-                  {item.note && <small>{item.note}</small>}
-                </div>
-              )
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
-  </section>
-
-  <section id="highlights" class="section">
-    <div class="section-head">
-      <h2>{content.highlights.title}</h2>
-      <p>{content.highlights.lead}</p>
-    </div>
-    <div class="card-grid">
-      {content.highlights.items.map((item, index) => (
-        <article class="card" style={`animation-delay: ${index * 80}ms`}>
-          <h3>{item.title}</h3>
-          <p>{item.description}</p>
-        </article>
-      ))}
-    </div>
-  </section>
-
-  {sections.map((section) => (
-    <section id={section.id} class="section">
-      <div class="section-head">
-        <h2>{section.title}</h2>
-        {section.lead && <p>{section.lead}</p>}
-      </div>
-      <div class="card-grid">
-        {section.items.map((item, index) => (
-          <article class="card" style={`animation-delay: ${index * 80}ms`}>
-            <div class="card-meta">
-              <div>
-                {item.url ? (
-                  <a class="card-title" href={item.url} target="_blank" rel="noreferrer">
-                    {item.title}
-                  </a>
-                ) : (
-                  <span class="card-title">{item.title}</span>
-                )}
-                {item.meta && <span class="card-sub">{item.meta}</span>}
-              </div>
-              {item.badge && <span class="badge">{item.badge}</span>}
+              ))}
             </div>
-            {item.description && <p>{item.description}</p>}
-          </article>
-        ))}
-      </div>
-    </section>
-  ))}
-
-  <section id="contact" class="section contact">
-    <div class="contact-card">
-      <div>
-        <h2>{content.nav.contact}</h2>
-        <p>{content.footer.note}</p>
-      </div>
-      <div class="hero-cta">
-        <a class="btn primary" href={content.cta.emailUrl}>{content.cta.emailLabel}</a>
-        <a class="btn ghost" href={content.cta.calendlyUrl} target="_blank" rel="noreferrer">
-          {content.cta.calendlyLabel}
-        </a>
-      </div>
+          </section>
+        )}
+      </aside>
     </div>
-  </section>
-</main>
 
-<footer class="site-footer">
-  <p>{content.footer.copyright}</p>
-</footer>
+    <footer class="site-footer">
+      <p>{content.footer.note}</p>
+      <p>{content.footer.copyright}</p>
+    </footer>
+  </div>
+</div>

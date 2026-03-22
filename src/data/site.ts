@@ -2,30 +2,16 @@ export type Locale = "en" | "tr";
 
 type SocialLink = {
   label: string;
-  url: string;
+  href: string;
 };
 
-type DownloadLink = {
+type BentoCard = {
   title: string;
-  note?: string;
-  url?: string;
-  disabled?: boolean;
-};
-
-type SectionItem = {
-  title: string;
-  meta?: string;
-  description?: string;
-  url?: string;
-  badge?: string;
-};
-
-type Section = {
-  id: string;
-  title: string;
-  lead?: string;
-  items: SectionItem[];
-  enabled?: boolean;
+  description: string;
+  href?: string;
+  icon: "folder" | "pen" | "mail" | "music" | "spark" | "heart";
+  span?: string;
+  eyebrow?: string;
 };
 
 type Content = {
@@ -34,364 +20,178 @@ type Content = {
     description: string;
   };
   nav: {
-    overview: string;
-    highlights: string;
-    ventures: string;
-    community: string;
-    writing: string;
-    speaking: string;
-    contact: string;
+    home: string;
+    cv: string;
+    blog: string;
+    soon: string;
   };
-  hero: {
+  profile: {
     name: string;
     role: string;
     tagline: string;
     summary: string;
     location: string;
+    imageUrl: string;
     imageAlt: string;
-    initials: string;
-    focus: string[];
-  };
-  cta: {
-    emailLabel: string;
-    emailUrl: string;
-    calendlyLabel: string;
-    calendlyUrl: string;
   };
   social: SocialLink[];
-  downloads: {
-    title: string;
-    items: DownloadLink[];
-    enabled?: boolean;
+  home: {
+    label: string;
+    heroTitle: string;
+    heroDescription: string;
+    focusTitle: string;
+    focusItems: string[];
+    cards: BentoCard[];
+    contact: BentoCard;
   };
-  highlights: {
-    title: string;
-    lead: string;
-    items: Array<{ title: string; description: string }>;
-  };
-  sections: Section[];
   footer: {
-    note: string;
-    copyright: string;
+    rights: string;
   };
 };
 
 const content: Record<Locale, Content> = {
   en: {
     meta: {
-      title: "Burak Yoruk — Signature Profile",
-      description:
-        "Technology entrepreneur focused on venture building, community systems, and thoughtful writing."
+      title: "Burak Yoruk — Home",
+      description: "A modern personal homepage for Burak Yoruk with selected work, writing, music, NGO work, and contact."
     },
     nav: {
-      overview: "Overview",
-      highlights: "Focus",
-      ventures: "Ventures",
-      community: "Community",
-      writing: "Writing",
-      speaking: "Speaking & Press",
-      contact: "Contact"
+      home: "Home",
+      cv: "CV",
+      blog: "Blog",
+      soon: "Soon"
     },
-    hero: {
+    profile: {
       name: "Burak Yoruk",
-      role: "Technology Entrepreneur",
-      tagline: "Building ventures at the edge of community, systems, and narrative.",
-      summary:
-        "This is a signature profile that blends a digital business card with a living archive. It is designed to grow into a multi‑page presence while staying fast and clear.",
-      location: "Based in Istanbul · Working globally",
-      imageAlt: "Profile placeholder",
-      initials: "BY",
-      focus: [
-        "Venture building and product strategy",
-        "Community infrastructure and knowledge networks",
-        "Editorial writing with a technological lens"
-      ]
-    },
-    cta: {
-      emailLabel: "Email",
-      emailUrl: "mailto:hello@yourdomain.com",
-      calendlyLabel: "Book a call",
-      calendlyUrl: "https://calendly.com/your-handle/intro"
+      role: "Entrepreneur & Engineer",
+      tagline: "Working on autonomous systems, R&D, and venture building.",
+      summary: "Co-Founder at Meshine. Background in avionics, computer vision, embedded systems, and UAV platforms.",
+      location: "Izmir, Turkiye",
+      imageUrl: "/profile.jpg",
+      imageAlt: "Portrait of Burak Yoruk"
     },
     social: [
-      { label: "LinkedIn", url: "https://www.linkedin.com/in/your-handle" },
-      { label: "X", url: "https://x.com/your-handle" },
-      { label: "Instagram", url: "https://instagram.com/your-handle" },
-      { label: "GitHub", url: "https://github.com/your-handle" }
+      { label: "X", href: "https://twitter.com/BurakYoruk35" },
+      { label: "LinkedIn", href: "https://www.linkedin.com/in/byoruk/" },
+      { label: "GitHub", href: "https://github.com/Shubuo" },
+      { label: "Instagram", href: "https://www.instagram.com/b.yorukk/" }
     ],
-    downloads: {
-      title: "Downloads",
-      enabled: true,
-      items: [
+    home: {
+      label: "Homepage",
+      heroTitle: "Autonomous systems, applied R&D, and venture building.",
+      heroDescription: "Focused on UAV platforms, computer vision, embedded systems, and product strategy.",
+      focusTitle: "Current Focus",
+      focusItems: [
+        "Connected autonomous systems",
+        "Computer vision",
+        "Business development"
+      ],
+      cards: [
         {
-          title: "Download vCard",
-          note: "Add to your contacts",
-          disabled: true
+          title: "Personal",
+          description: "Writing, music, and technical curiosity.",
+          href: "#",
+          icon: "music",
+          eyebrow: "Personal"
         },
         {
-          title: "Company overview",
-          note: "One‑pager or deck",
-          disabled: true
+          title: "Professional",
+          description: "Meshine, R&D, and engineering-led product work.",
+          href: "#",
+          icon: "folder",
+          eyebrow: "Professional"
+        },
+        {
+          title: "Social Impact",
+          description: "Mentoring, volunteering, and community work.",
+          href: "#",
+          icon: "heart",
+          eyebrow: "Social"
         }
-      ]
-    },
-    highlights: {
-      title: "Focus",
-      lead: "The recurring themes across ventures, community work, and writing.",
-      items: [
-        {
-          title: "Technology entrepreneurship",
-          description: "Building systems-first companies that scale with culture."
-        },
-        {
-          title: "Community architecture",
-          description: "Designing networks that turn knowledge into momentum."
-        },
-        {
-          title: "Editorial practice",
-          description: "Long‑form reflections at the intersection of tech and society."
-        }
-      ]
-    },
-    sections: [
-      {
-        id: "ventures",
-        title: "Ventures",
-        lead: "Selected companies and initiatives. Replace the placeholders with real milestones.",
-        items: [
-          {
-            title: "Venture Name",
-            meta: "Founder · 2023 — Present",
-            description:
-              "One‑sentence mission statement describing the venture and its focus."
-          },
-          {
-            title: "Venture Name",
-            meta: "Product Lead · 2020 — 2023",
-            description:
-              "Brief outcome, market, or signature achievement to anchor credibility."
-          }
-        ]
-      },
-      {
-        id: "community",
-        title: "Community",
-        lead: "Programs, collectives, or knowledge networks you cultivate.",
-        items: [
-          {
-            title: "Community Initiative",
-            meta: "Organizer",
-            description:
-              "What the community is about, who it serves, and the impact it creates."
-          },
-          {
-            title: "Community Initiative",
-            meta: "Advisor",
-            description:
-              "A concise summary of the format, cadence, or scale."
-          }
-        ]
-      },
-      {
-        id: "writing",
-        title: "Writing",
-        lead: "External writing hubs and selected essays.",
-        items: [
-          {
-            title: "Essay or series title",
-            meta: "Medium · 2026",
-            description: "Short synopsis of the piece and why it matters.",
-            url: "https://medium.com/@your-handle"
-          },
-          {
-            title: "Newsletter piece",
-            meta: "Substack · 2026",
-            description:
-              "Highlight the editorial angle and the intended audience.",
-            url: "https://your-handle.substack.com"
-          }
-        ]
-      },
-      {
-        id: "speaking",
-        title: "Speaking & Press",
-        lead: "Talks, panels, interviews, or media coverage.",
-        items: [
-          {
-            title: "Conference Talk",
-            meta: "Event Name · 2025",
-            description: "Topic and key takeaway in one clean sentence."
-          },
-          {
-            title: "Interview or podcast",
-            meta: "Publication · 2024",
-            description: "Short description with a link when available."
-          }
-        ]
+      ],
+      contact: {
+        title: "Reach Out",
+        description: "For R&D, product, and collaboration inquiries, email is the best starting point.",
+        href: "mailto:burak@meshine.tech",
+        icon: "mail",
+        eyebrow: "Contact",
+        span: "md:col-span-3"
       }
-    ],
+    },
     footer: {
-      note: "Signature profile for founders, operators, and community builders.",
-      copyright: "All rights reserved. © 2026"
+      rights: "© 2026 Burak Yoruk. All rights reserved."
     }
   },
   tr: {
     meta: {
-      title: "Burak Yörük — Signature Profil",
-      description:
-        "Girişim, topluluk ve düşünsel üretimin kesişiminde çalışan teknoloji girişimcisi."
+      title: "Burak Yörük — Ana Sayfa",
+      description: "Burak Yörük için seçili işler, yazılar, müzik, STK çalışmaları ve iletişimi öne çıkaran modern kişisel ana sayfa."
     },
     nav: {
-      overview: "Genel",
-      highlights: "Odak",
-      ventures: "Girişimler",
-      community: "Topluluk",
-      writing: "Yazılar",
-      speaking: "Konuşmalar & Basın",
-      contact: "İletişim"
+      home: "Ana Sayfa",
+      cv: "CV",
+      blog: "Blog",
+      soon: "Yakında"
     },
-    hero: {
+    profile: {
       name: "Burak Yörük",
-      role: "Teknoloji Girişimcisi",
-      tagline:
-        "Topluluk, sistemler ve anlatı arasında ölçeklenen girişimler inşa ediyorum.",
-      summary:
-        "Bu imza profil; dijital kartviziti yaşayan bir arşivle birleştirir. Basit başlar, çok sayfalı bir kimliğe sorunsuz evrilir.",
-      location: "İstanbul merkezli · Küresel çalışma",
-      imageAlt: "Profil yer tutucusu",
-      initials: "BY",
-      focus: [
-        "Girişim kurma ve ürün stratejisi",
-        "Topluluk altyapıları ve bilgi ağları",
-        "Teknoloji merceğinden editöryel yazı"
-      ]
-    },
-    cta: {
-      emailLabel: "E‑posta",
-      emailUrl: "mailto:hello@yourdomain.com",
-      calendlyLabel: "Görüşme ayarla",
-      calendlyUrl: "https://calendly.com/your-handle/intro"
+      role: "Entrepreneur & Engineer",
+      tagline: "Otonom sistemler, Ar-Ge ve girişim geliştirme üzerinde çalışıyorum.",
+      summary: "Meshine kurucu ortağıyım. Aviyonik, bilgisayarlı görü, gömülü sistemler ve İHA platformları geçmişim var.",
+      location: "Izmir, Turkiye",
+      imageUrl: "/profile.jpg",
+      imageAlt: "Burak Yörük portresi"
     },
     social: [
-      { label: "LinkedIn", url: "https://www.linkedin.com/in/your-handle" },
-      { label: "X", url: "https://x.com/your-handle" },
-      { label: "Instagram", url: "https://instagram.com/your-handle" },
-      { label: "GitHub", url: "https://github.com/your-handle" }
+      { label: "X", href: "https://twitter.com/BurakYoruk35" },
+      { label: "LinkedIn", href: "https://www.linkedin.com/in/byoruk/" },
+      { label: "GitHub", href: "https://github.com/Shubuo" },
+      { label: "Instagram", href: "https://www.instagram.com/b.yorukk/" }
     ],
-    downloads: {
-      title: "İndirilebilirler",
-      enabled: true,
-      items: [
+    home: {
+      label: "Ana Sayfa",
+      heroTitle: "Otonom sistemler, uygulamalı Ar-Ge ve girişim geliştirme.",
+      heroDescription: "İHA platformları, bilgisayarlı görü, gömülü sistemler ve ürün stratejisi odağında çalışıyorum.",
+      focusTitle: "Güncel Odak",
+      focusItems: [
+        "Bağlantılı otonom sistemler",
+        "Bilgisayarlı görü",
+        "İş geliştirme"
+      ],
+      cards: [
         {
-          title: "vCard indir",
-          note: "Kişilere ekle",
-          disabled: true
+          title: "Bireysel",
+          description: "Yazı, müzik ve teknik merak.",
+          href: "#",
+          icon: "music",
+          eyebrow: "Bireysel"
         },
         {
-          title: "Şirket özeti",
-          note: "Tek sayfa / sunum",
-          disabled: true
+          title: "Profesyonel",
+          description: "Meshine, Ar-Ge ve mühendislik odaklı ürün çalışmaları.",
+          href: "#",
+          icon: "folder",
+          eyebrow: "Profesyonel"
+        },
+        {
+          title: "Sosyal Çalışmalar",
+          description: "Mentorluk, gönüllülük ve topluluk katkıları.",
+          href: "#",
+          icon: "heart",
+          eyebrow: "Sosyal"
         }
-      ]
-    },
-    highlights: {
-      title: "Odak",
-      lead: "Girişimler, topluluk çalışmaları ve yazı üretimindeki ortak temalar.",
-      items: [
-        {
-          title: "Teknoloji girişimciliği",
-          description:
-            "Kültürle birlikte ölçeklenen sistem‑odaklı şirketler."
-        },
-        {
-          title: "Topluluk mimarisi",
-          description: "Bilgiyi ivmeye dönüştüren ağ tasarımı."
-        },
-        {
-          title: "Editöryel üretim",
-          description: "Teknoloji ve toplum kesişiminde uzun anlatılar."
-        }
-      ]
-    },
-    sections: [
-      {
-        id: "ventures",
-        title: "Girişimler",
-        lead: "Seçili şirketler ve inisiyatifler. Yer tutucuları gerçek verilerle değiştirin.",
-        items: [
-          {
-            title: "Girişim Adı",
-            meta: "Kurucu · 2023 — Günümüz",
-            description:
-              "Girişimin ne yaptığına dair tek cümlelik bir misyon ifadesi."
-          },
-          {
-            title: "Girişim Adı",
-            meta: "Ürün Lideri · 2020 — 2023",
-            description:
-              "Kısa bir çıktı, pazar ya da somut başarı vurgusu."
-          }
-        ]
-      },
-      {
-        id: "community",
-        title: "Topluluk",
-        lead: "Kurduğunuz programlar, kolektifler veya bilgi ağları.",
-        items: [
-          {
-            title: "Topluluk İnisiyatifi",
-            meta: "Organizatör",
-            description:
-              "Topluluğun amacı, kimlere hizmet ettiği ve etkisi."
-          },
-          {
-            title: "Topluluk İnisiyatifi",
-            meta: "Danışman",
-            description:
-              "Format, periyot veya ölçek hakkında kısa özet."
-          }
-        ]
-      },
-      {
-        id: "writing",
-        title: "Yazılar",
-        lead: "Harici yayınlar ve seçilmiş denemeler.",
-        items: [
-          {
-            title: "Deneme ya da seri başlığı",
-            meta: "Medium · 2026",
-            description: "Metnin odağını anlatan kısa bir özet.",
-            url: "https://medium.com/@your-handle"
-          },
-          {
-            title: "Bülten yazısı",
-            meta: "Substack · 2026",
-            description: "Editöryel açı ve hedef kitle vurgusu.",
-            url: "https://your-handle.substack.com"
-          }
-        ]
-      },
-      {
-        id: "speaking",
-        title: "Konuşmalar & Basın",
-        lead: "Sunumlar, paneller, röportajlar ve medya görünürlüğü.",
-        items: [
-          {
-            title: "Konferans konuşması",
-            meta: "Etkinlik Adı · 2025",
-            description: "Konu ve ana çıkarımı tek cümlede anlatın."
-          },
-          {
-            title: "Röportaj veya podcast",
-            meta: "Yayın · 2024",
-            description: "Uygunsa bağlantı ekleyin."
-          }
-        ]
+      ],
+      contact: {
+        title: "Bana Ulaşın",
+        description: "Ar-Ge, ürün ve iş birliği konuları için en doğru başlangıç noktası e-posta.",
+        href: "mailto:burak@meshine.tech",
+        icon: "mail",
+        eyebrow: "İletişim",
+        span: "md:col-span-3"
       }
-    ],
+    },
     footer: {
-      note: "Kurucular, operatörler ve topluluk liderleri için imza profil.",
-      copyright: "Tüm hakları saklıdır. © 2026"
+      rights: "© 2026 Burak Yörük. Tüm hakları saklıdır."
     }
   }
 };

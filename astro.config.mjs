@@ -1,12 +1,9 @@
-import { defineConfig } from "astro/config";
+import { defineConfig } from 'astro/config';
+import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-  site: "https://burakyoruk.com.tr",
-  i18n: {
-    defaultLocale: "en",
-    locales: ["en", "tr"],
-    routing: {
-      prefixDefaultLocale: false
-    }
-  }
+  site: 'https://burakyoruk.com.tr',
+  vite: {
+    plugins: [tailwindcss()],
+  },
 });
