@@ -5,6 +5,9 @@ const { title, description, lang = "en" } = Astro.props;
 const isEn = lang === "en";
 const altHref = isEn ? "/tr/" : "/";
 const altLang = isEn ? "tr" : "en";
+const canonicalPath = isEn ? "/" : "/tr/";
+const canonicalUrl = new URL(canonicalPath, Astro.site);
+const alternateUrl = new URL(altHref, Astro.site);
 const themeScript = `(() => {
   const storageKey = "theme";
   const root = document.documentElement;
@@ -46,20 +49,22 @@ const toggleScript = `(() => {
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="color-scheme" content="light dark" />
-    <link rel="alternate" href={altHref} hreflang={altLang} />
-    <link rel="alternate" href={isEn ? "/" : "/tr/"} hreflang={lang} />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="alternate" href={alternateUrl} hreflang={altLang} />
+    <link rel="alternate" href={canonicalUrl} hreflang={lang} />
+    <link rel="alternate" href={canonicalUrl} hreflang="x-default" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap"
       rel="stylesheet"
     />
-    <script is:inline>{themeScript}</script>
+    <script is:inline set:html={themeScript}></script>
   </head>
   <body>
     <div class="page-shell">
       <slot />
     </div>
-    <script is:inline>{toggleScript}</script>
+    <script is:inline set:html={toggleScript}></script>
   </body>
 </html>

@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+Host: burakyoruk.com.tr
+Sitemap: https://burakyoruk.com.tr/sitemap.xml
